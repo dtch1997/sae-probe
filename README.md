@@ -4,27 +4,19 @@
 [![pdm-managed](https://img.shields.io/badge/pdm-managed-blueviolet)](https://pdm-project.org)
 [![Checked with pyright](https://microsoft.github.io/pyright/img/pyright_badge.svg)](https://microsoft.github.io/pyright/)
 
-This is a PDM template that can be used to quickly set up a new repository with several quality-of-life features:
-1. Pre-commit hooks to enforce style and types
-2. A CI workflow to support automated testing, semantic versioning, and package release
-
-More features that could be added at some point: 
-- Coverage reports with CodeCov
-- Badges for lint, test, release
-- Standard templates for Docker / Singularity containers to support containerized deployment
-- Documentation with Sphinx
-- Standard issue templates
-
-Install the template via: 
-```
-pdm init https://github.com/90HH/sae-probe
-```
-Then replace this section with your own text
-
 # Quickstart
 
+First, install PDM. 
+```
+# Instructions for Linux
+curl -sSL https://pdm-project.org/install-pdm.py | python3 -
+echo "export PATH=~/.local/bin:$PATH" >> ~/.bashrc
+source ~/.bashrc
+```
+
+Now, install the repository. 
 ```bash
-pip install sae-probe
+pdm install
 ```
 
 # Development
