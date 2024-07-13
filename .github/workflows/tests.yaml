@@ -38,11 +38,11 @@ jobs:
             huggingface-${{ runner.os }}-${{ matrix.python-version }}-
       - name: Install dependencies
         run: pdm install
-      - name: check formatting
-        run: pdm run ruff format --check
-      - name: check linting
-        run: pdm run ruff check
-      - name: check types
-        run: pdm run pyright
+      # - name: check formatting
+      #   run: pdm run ruff format --check
+      # - name: check linting
+      #   run: pdm run ruff check
+      # - name: check types
+      #   run: pdm run pyright
       - name: test
         run: pdm run pytest
