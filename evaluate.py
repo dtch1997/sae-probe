@@ -7,12 +7,13 @@ from typing import Dict, Optional, List
 
 
 #%% 
-def tokenize_question(tokenizer, question, model_output):
+def tokenize_question(tokenizer, question, model_output="("):
     """
     Returns the tokenized input for each eval question to be passed into the model.
     """
-    template = [{"role":"user", "content": question}, {"role":"assistant", "content": model_output}, {"role":"assistant", "content": "("}]
-    tokens = tokenizer.apply_template(template, tokenize = True, return_tensors = "pt", add_generation_prompt = False)
+    template = [{"role":"user", "content": question}]
+    model_output_tokens = t.tensor(tokenizer.encode("(")[1:]).unsqueeze(dim=0).to(device)
+    tokens = t.cat((tokenizer.apply_chat_template(template, tokenize = True, return_tensors = "pt", add_generation_prompt = True).to(device), model_output_tokens),dim=-1).to(device)
     return tokens
 
 
@@ -40,7 +41,7 @@ def process_item_ab(
     # system_prompt: Optional[str],
     a_token_id: int,
     b_token_id: int,
-) -> Dict[str, str]:
+) -> Dict:
     """
     Process an item from the AB test dataset.
     """
@@ -99,9 +100,14 @@ model = AutoModelForCausalLM.from_pretrained(
     torch_dtype=t.bfloat16
 )
 device = t.device("cuda" if t.cuda.is_available() else "cpu")
+
+#%%
 dataset = load_json("datasets/test/sycophancy/test_dataset_ab.json")
 
-a_token = tokenizer.encode("A")[0]
-b_token = tokenizer.encode("B")[0]
+a_token = tokenizer.encode("A")[-1]
+b_token = tokenizer.encode("B")[-1]
 
 results = evaluate_dataset(dataset=dataset, model=model, a_token_id=1, b_token_id=2)
+print(results)
+accuracy = summarize_results(results)
+# %%
