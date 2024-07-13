@@ -7,11 +7,13 @@ from typing import Dict, Optional, List
 
 
 #%% 
-def tokenize_question(tokenizer, question, model_output="("):
+def tokenize_question(tokenizer, question, model_output="(", system_prompt=None):
     """
     Returns the tokenized input for each eval question to be passed into the model.
     """
     template = [{"role":"user", "content": question}]
+    if system_prompt is not None:
+        template = [{"role":"system", "content": system_prompt}] + template
     model_output_tokens = t.tensor(tokenizer.encode("(")[1:]).unsqueeze(dim=0).to(device)
     tokens = t.cat((tokenizer.apply_chat_template(template, tokenize = True, return_tensors = "pt", add_generation_prompt = True).to(device), model_output_tokens),dim=-1).to(device)
     return tokens
